@@ -15,6 +15,33 @@ export const mutations = {
     },
     DELETE_A_MOVIE(state, id) {
         state.allMovies = state.allMovies.filter((movie) => movie.id !== id)
+    },
+    SET_LIKE(state, index) {
+      if(state.allMovies[index].isLiked === false){
+        state.allMovies[index].isLiked = !state.allMovies[index].isLiked;
+        state.allMovies[index].likes += 1;
+        if(state.allMovies[index].isDisliked) {
+          state.allMovies[index].dislikes -= 1;
+        }
+      }else {
+        state.allMovies[index].isLiked = !state.allMovies[index].isLiked;
+        state.allMovies[index].likes -= 1;
+      }
+      state.allMovies[index].isDisliked = false;
+    },
+    SET_DISLIKE(state, index) {
+      if(state.allMovies[index].isDisliked === false){
+        state.allMovies[index].isDisliked = !state.allMovies[index].isDisliked;
+        state.allMovies[index].dislikes += 1;
+        if(state.allMovies[index].isLiked) {
+          state.allMovies[index].likes -= 1;
+        }
+
+      }else {
+        state.allMovies[index].isDisliked = !state.allMovies[index].isDisliked;
+        state.allMovies[index].dislikes -= 1;
+      }
+      state.allMovies[index].isLiked = false;
     }
 }
 
@@ -24,5 +51,11 @@ export const actions = {
     },
     handleDeleteMovie({ commit }, id) {
         commit('DELETE_A_MOVIE', id);
+    },
+    handleSetLike({ commit }, index) {
+        commit('SET_LIKE', index);
+    },
+    handleSetDislike({ commit }, index) {
+      commit('SET_DISLIKE', index)
     }
 }
