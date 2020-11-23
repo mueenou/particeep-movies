@@ -25,7 +25,7 @@
             <a-button style="margin-left: 8px"> Select categories <a-icon type="down" /> </a-button>
           </a-dropdown>
         </div>
-        <div v-if="selectedCategories.length === 0">
+        <div v-if="selectedCategories.length === 0" class="movies-container">
           <div class="movie-card" v-for="(movie, index) in $store.state.allMovies" :key="movie.id">
               <img :src="movie.img" alt="movie">
               <h2>{{movie.title}}</h2>
@@ -35,7 +35,7 @@
               <button @click="$store.dispatch('handleDeleteMovie', movie.id)">x</button>
           </div>
         </div>
-          <div v-else>
+          <div v-else class="movies-container">
             <div class="movie-card" v-for="(movie, index) in filteredMovies" :key="movie.id">
               <img :src="movie.img" alt="movie">
               <h2>{{movie.title}}</h2>
@@ -112,6 +112,12 @@ export default {
 <style scoped>
 .movies {
   width: 100%;
+}
+
+.movies-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .category-container {
