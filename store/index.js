@@ -56,6 +56,6 @@ export const actions = {
         commit('SET_LIKE', index);
     },
     handleSetDislike({ commit }, index) {
-      commit('SET_DISLIKE', index)
-    }
+      commit('SET_DISLIKE', index);
+    },
 }

@@ -12,7 +12,7 @@ import Movies from '../components/Movies.vue'
 export default {
   components: { Movies },
   mounted() {
-    this.$store.dispatch('handleFetchMovies')
+    this.$store.dispatch('handleFetchMovies');
   }
 
 }
