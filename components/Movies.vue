@@ -14,36 +14,66 @@
             <span @click="deleteCategory(category)"><a-icon class="icon" type="close" /></span>{{category}}
           </span>
         </div>
-        <div>
-          <a-dropdown :trigger="['click']" >
+        
+        <div class="category-dropdown">
+          <a-dropdown :trigger="['click']" id="category-dropdown">
             <a-menu slot="overlay" @click="handleMenuClick">
-              <a-menu-item key="1" value="Animation"><a-icon type="default" />Animation</a-menu-item>
-              <a-menu-item key="2" value="Thriller"><a-icon type="default" />Thriller</a-menu-item>
-              <a-menu-item key="3" value="Drame"><a-icon type="default" />Drame</a-menu-item>
-              <a-menu-item key="4" value="Comedy"><a-icon type="default" />Comedy</a-menu-item>
+              <a-menu-item :key="index" :value="category" v-for="(category, index) in categories"><a-icon type="default" />{{category}}</a-menu-item>
             </a-menu>
             <a-button style="margin-left: 8px"> Select categories <a-icon type="down" /> </a-button>
           </a-dropdown>
         </div>
         <div v-if="selectedCategories.length === 0" class="movies-container">
-          <div class="movie-card" v-for="(movie, index) in $store.state.allMovies" :key="movie.id">
-              <img :src="movie.img" alt="movie">
-              <h2>{{movie.title}}</h2>
-              <p>{{movie.category}}</p>
-              <div><span>{{movie.likes}}</span><span>{{movie.dislikes}}</span></div>
-              <div><span @click="$store.dispatch('handleSetLike', index)"><a-icon type="like" theme="filled" /></span>  <span @click="$store.dispatch('handleSetDislike', index)"><a-icon type="dislike" theme="filled" /></span></div>
-              <button @click="$store.dispatch('handleDeleteMovie', movie.id)">x</button>
-          </div>
+          <a-card size="small" style="width: 200px; margin: 15px;" hoverable v-for="(movie, index) in $store.state.allMovies" :key="movie.id">
+            <img
+              slot="cover"
+              alt="example"
+              :src="movie.img"
+              style="height: 200px"
+            />
+            <template slot="actions" class="ant-card-actions">
+              <div @click="$store.dispatch('handleSetLike', index)">
+                <a-icon type="like" theme="filled" />
+                <div>{{movie.likes}}</div>
+              </div>
+              <div @click="$store.dispatch('handleDeleteMovie', movie.id)">
+                <a-icon key="delete" type="delete" />
+                <div>Delete</div>
+              </div>
+              <div @click="$store.dispatch('handleSetDislike', index)">
+                <a-icon type="dislike" theme="filled" />
+                <div>{{movie.dislikes}}</div>
+              </div>
+            </template>
+            <a-card-meta :title="movie.title" :description="movie.category">
+            </a-card-meta>
+          </a-card>
         </div>
           <div v-else class="movies-container">
-            <div class="movie-card" v-for="(movie, index) in filteredMovies" :key="movie.id">
-              <img :src="movie.img" alt="movie">
-              <h2>{{movie.title}}</h2>
-              <p>{{movie.category}}</p>
-              <div><span>{{movie.likes}}</span><span>{{movie.dislikes}}</span></div>
-              <div><span @click="$store.dispatch('handleSetLike', index)"><a-icon type="like" theme="filled" /></span>  <span @click="$store.dispatch('handleSetDislike', index)"><a-icon type="dislike" theme="filled" /></span></div>
-              <button @click="$store.dispatch('handleDeleteMovie', movie.id)">x</button>
-            </div>
+            <a-card size="small" style="width: 200px; margin: 15px;" hoverable v-for="(movie, index) in filteredMovies" :key="movie.id">
+            <img
+              slot="cover"
+              alt="example"
+              :src="movie.img"
+              style="height: 200px"
+            />
+            <template slot="actions" class="ant-card-actions">
+              <div @click="$store.dispatch('handleSetLike', index)">
+                <a-icon type="like" theme="filled" />
+                <div>{{movie.likes}}</div>
+              </div>
+              <div @click="$store.dispatch('handleDeleteMovie', movie.id)">
+                <a-icon key="delete" type="delete" />
+                <div>Delete</div>
+              </div>
+              <div @click="$store.dispatch('handleSetDislike', index)">
+                <a-icon type="dislike" theme="filled" />
+                <div>{{movie.dislikes}}</div>
+              </div>
+            </template>
+            <a-card-meta :title="movie.title" :description="movie.category">
+            </a-card-meta>
+          </a-card>
         </div>
     </div>
 </template>
@@ -58,7 +88,7 @@ export default {
       selectedCategories: [],
       staticMovies: this.allStaticMovies,
       filteredMovies: [],
-      categories: [],
+      categories: []
     }
   },
   mounted() {
@@ -74,10 +104,7 @@ export default {
     },
     exportCategories() {
       this.categories = this.staticMovies.map((movie) => {
-        return { 
-          title: movie.category,
-          value: movie.category
-        }
+        return movie.category
       });
       this.categories = [...new Set(this.categories)];
       console.log('exported categories: ', this.categories);
@@ -118,6 +145,9 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 60%;
+  margin: 30px auto;
 }
 
 .category-container {
@@ -132,5 +162,10 @@ export default {
 .category-container .category span {
   border-right: 1px solid grey;
   margin-right: 3px;
+}
+
+.category-dropdown {
+  text-align: center;
+  width: 100%;
 }
 </style>
