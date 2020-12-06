@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <header>
-      <h1>Particeep Movies</h1>
+      <a-page-header
+        style="border: 1px solid rgb(235, 237, 240)"
+        title="Particeep Movies"
+        sub-title="The best movie library"
+      />
     </header>
     <Movies/>
   </div>
@@ -21,15 +25,11 @@ export default {
 <style scoped>
 
 .container {
-  margin: 0 auto;
   min-height: 100vh;
 }
 
 .container header {
-  background-color: #d0d0d0;
-  height: 50px;
-  width: 100%;
-  text-align: center;
+  margin-bottom: 30px;
 }
 
 </style>

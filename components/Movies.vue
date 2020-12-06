@@ -1,17 +1,8 @@
 <template>
     <div class="movies">
-        <h2>Movies</h2>
-        <!-- <a-tree-select
-          v-model="value"
-          style="width: 100%"
-          :tree-data="treeData"
-          tree-checkable
-          :show-checked-strategy="SHOW_PARENT"
-          search-placeholder="Please select"
-        /> -->
         <div class="category-container" v-show="selectedCategories.length > 0">
           <span class="category" v-for="(category, index) in selectedCategories" :key="index+category">
-            <span @click="deleteCategory(category)"><a-icon class="icon" type="close" /></span>{{category}}
+            <span @click="deleteCategory(category)"><a-icon class="icon" type="close" /></span><p>{{category}}</p>
           </span>
         </div>
         
@@ -169,17 +160,30 @@ export default {
 }
 
 .category-container {
+  margin: 0 auto;
+  text-align: center;
   height: 40px;
 }
 
 .category-container .category {
-  border: 1px solid grey;
+  border: 1px solid #d0d0d0;
+  border-radius: 3px;
+  line-height: 40px;
   margin: 0 10px;
 }
 
 .category-container .category span {
-  border-right: 1px solid grey;
+  border-right: 1px solid #d0d0d0;
+  color: #d0d0d0;
   margin-right: 3px;
+}
+.category-container .category p {
+  display: inline;
+  color: #606060;
+}
+
+.icon:hover {
+  cursor: pointer;
 }
 
 .category-dropdown {
