@@ -24,56 +24,66 @@
           </a-dropdown>
         </div>
         <div v-if="selectedCategories.length === 0" class="movies-container">
-          <a-card size="small" style="width: 200px; margin: 15px;" hoverable v-for="(movie, index) in $store.state.allMovies" :key="movie.id">
-            <img
-              slot="cover"
-              alt="example"
-              :src="movie.img"
-              style="height: 200px"
-            />
-            <template slot="actions" class="ant-card-actions">
-              <div @click="$store.dispatch('handleSetLike', index)">
-                <a-icon type="like" theme="filled" />
-                <div>{{movie.likes}}</div>
-              </div>
-              <div @click="$store.dispatch('handleDeleteMovie', movie.id)">
-                <a-icon key="delete" type="delete" />
-                <div>Delete</div>
-              </div>
-              <div @click="$store.dispatch('handleSetDislike', index)">
-                <a-icon type="dislike" theme="filled" />
-                <div>{{movie.dislikes}}</div>
-              </div>
-            </template>
-            <a-card-meta :title="movie.title" :description="movie.category">
-            </a-card-meta>
-          </a-card>
+          <div v-for="(movie, index) in $store.state.allMovies" :key="movie.id">
+            <a-card size="small" style="width: 200px; margin: 15px;" hoverable>
+              <img
+                slot="cover"
+                alt="example"
+                :src="movie.img"
+                style="height: 200px"
+              />
+              <template slot="actions" class="ant-card-actions">
+                <div @click="$store.dispatch('handleSetLike', index)">
+                  <a-icon type="like" theme="filled" :class="movie.isLiked ? 'liked' : ''"/>
+                  <div :class="movie.isLiked ? 'liked' : ''">{{movie.likes}}</div>
+                </div>
+                <div @click="$store.dispatch('handleDeleteMovie', movie.id)">
+                  <a-icon key="delete" type="delete" />
+                  <div>Delete</div>
+                </div>
+                <div @click="$store.dispatch('handleSetDislike', index)">
+                  <a-icon type="dislike" theme="filled" :class="movie.isDisliked ? 'liked' : ''" />
+                  <div :class="movie.isDisliked ? 'liked' : ''">{{movie.dislikes}}</div>
+                </div>
+              </template>
+              <a-card-meta :title="movie.title" :description="movie.category">
+              </a-card-meta>
+            </a-card>
+            <div class="likebar-container">
+              <div class="likebar" :style="likeBarStyle(movie)"></div>
+            </div>
+          </div>
         </div>
           <div v-else class="movies-container">
-            <a-card size="small" style="width: 200px; margin: 15px;" hoverable v-for="(movie, index) in filteredMovies" :key="movie.id">
-            <img
-              slot="cover"
-              alt="example"
-              :src="movie.img"
-              style="height: 200px"
-            />
-            <template slot="actions" class="ant-card-actions">
-              <div @click="$store.dispatch('handleSetLike', index)">
-                <a-icon type="like" theme="filled" />
-                <div>{{movie.likes}}</div>
-              </div>
-              <div @click="$store.dispatch('handleDeleteMovie', movie.id)">
-                <a-icon key="delete" type="delete" />
-                <div>Delete</div>
-              </div>
-              <div @click="$store.dispatch('handleSetDislike', index)">
-                <a-icon type="dislike" theme="filled" />
-                <div>{{movie.dislikes}}</div>
-              </div>
-            </template>
-            <a-card-meta :title="movie.title" :description="movie.category">
-            </a-card-meta>
-          </a-card>
+            <div v-for="(movie, index) in filteredMovies" :key="movie.id">
+              <a-card size="small" style="width: 200px; margin: 15px;" hoverable>
+              <img
+                slot="cover"
+                alt="example"
+                :src="movie.img"
+                style="height: 200px"
+              />
+              <template slot="actions" class="ant-card-actions">
+                <div @click="$store.dispatch('handleSetLike', index)">
+                  <a-icon type="like" theme="filled" :class="movie.isLiked ? 'liked' : ''" />
+                  <div>{{movie.likes}}</div>
+                </div>
+                <div @click="$store.dispatch('handleDeleteMovie', movie.id)">
+                  <a-icon key="delete" type="delete" />
+                  <div>Delete</div>
+                </div>
+                <div @click="$store.dispatch('handleSetDislike', index)">
+                  <a-icon type="dislike" theme="filled" :class="movie.isDisliked ? 'liked' : ''"/>
+                  <div :class="movie.isDisliked ? 'liked' : ''">{{movie.dislikes}}</div>
+                </div>
+              </template>
+              <a-card-meta :title="movie.title" :description="movie.category">
+              </a-card-meta>
+            </a-card>
+            <div class="likebar-container">
+              <div class="likebar" :style="likeBarStyle(movie)"></div>
+            </div>
+          </div>
         </div>
     </div>
 </template>
@@ -88,13 +98,21 @@ export default {
       selectedCategories: [],
       staticMovies: this.allStaticMovies,
       filteredMovies: [],
-      categories: []
+      categories: [],
+      likeBarWidth: null
     }
   },
   mounted() {
     this.getStaticMovies();
   },
   methods: {
+    likeBarStyle(movie) {
+      return {
+        height: '5px',
+        backgroundColor: '#15acd6',
+        width: `${Math.floor((movie.likes/(movie.likes+movie.dislikes))*100)}%`
+      }
+    },
     async getStaticMovies() {
       const response = await import("../data/movies.js");
       const data = await response.movies$;
@@ -168,4 +186,17 @@ export default {
   text-align: center;
   width: 100%;
 }
+
+.likebar-container {
+  margin: 0 auto;
+  margin-top: -15px;
+  width: 200px;
+  height: 5px;
+  background-color: #D0D0D0;
+}
+
+.liked {
+  color: #15acd6;
+}
+
 </style>

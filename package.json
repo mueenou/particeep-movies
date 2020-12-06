@@ -14,5 +14,8 @@
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "less": "^3.12.2",
+    "less-loader": "^7.1.0"
+  }
 }
