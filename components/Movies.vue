@@ -15,7 +15,7 @@
           </a-dropdown>
         </div>
         <div v-if="selectedCategories.length === 0" class="movies-container">
-          <div v-for="(movie, index) in $store.state.allMovies" :key="movie.id">
+          <div v-for="movie in $store.state.allMovies" :key="movie.id">
             <a-card size="small" style="width: 200px; margin: 15px;" hoverable>
               <img
                 slot="cover"
@@ -24,7 +24,7 @@
                 style="height: 200px"
               />
               <template slot="actions" class="ant-card-actions">
-                <div @click="$store.dispatch('handleSetLike', index)">
+                <div @click="$store.dispatch('handleSetLike', movie.id)">
                   <a-icon type="like" theme="filled" :class="movie.isLiked ? 'liked' : ''"/>
                   <div :class="movie.isLiked ? 'liked' : ''">{{movie.likes}}</div>
                 </div>
@@ -32,7 +32,7 @@
                   <a-icon key="delete" type="delete" />
                   <div>Delete</div>
                 </div>
-                <div @click="$store.dispatch('handleSetDislike', index)">
+                <div @click="$store.dispatch('handleSetDislike', movie.id)">
                   <a-icon type="dislike" theme="filled" :class="movie.isDisliked ? 'liked' : ''" />
                   <div :class="movie.isDisliked ? 'liked' : ''">{{movie.dislikes}}</div>
                 </div>
@@ -46,7 +46,7 @@
           </div>
         </div>
           <div v-else class="movies-container">
-            <div v-for="(movie, index) in filteredMovies" :key="movie.id">
+            <div v-for="movie in filteredMovies" :key="movie.id">
               <a-card size="small" style="width: 200px; margin: 15px;" hoverable>
               <img
                 slot="cover"
@@ -55,7 +55,7 @@
                 style="height: 200px"
               />
               <template slot="actions" class="ant-card-actions">
-                <div @click="$store.dispatch('handleSetLike', index)">
+                <div @click="$store.dispatch('handleSetLike', movie.id)">
                   <a-icon type="like" theme="filled" :class="movie.isLiked ? 'liked' : ''" />
                   <div>{{movie.likes}}</div>
                 </div>
@@ -63,7 +63,7 @@
                   <a-icon key="delete" type="delete" />
                   <div>Delete</div>
                 </div>
-                <div @click="$store.dispatch('handleSetDislike', index)">
+                <div @click="$store.dispatch('handleSetDislike', movie.id)">
                   <a-icon type="dislike" theme="filled" :class="movie.isDisliked ? 'liked' : ''"/>
                   <div :class="movie.isDisliked ? 'liked' : ''">{{movie.dislikes}}</div>
                 </div>
@@ -136,7 +136,7 @@ export default {
     filterMovies() {
       this.filteredMovies = [];
       this.selectedCategories.forEach((category) => {
-        this.filteredMovies.push(this.staticMovies.filter(movie => movie.category === category))
+        this.filteredMovies.push(this.$store.state.allMovies.filter(movie => movie.category === category))
       })
       this.filteredMovies = this.filteredMovies.flat();
       this.filteredMovies = [...new Set(this.filteredMovies)];

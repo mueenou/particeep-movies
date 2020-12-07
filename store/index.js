@@ -16,32 +16,35 @@ export const mutations = {
     DELETE_A_MOVIE(state, id) {
         state.allMovies = state.allMovies.filter((movie) => movie.id !== id)
     },
-    SET_LIKE(state, index) {
-      if(state.allMovies[index].isLiked === false){
-        state.allMovies[index].isLiked = !state.allMovies[index].isLiked;
-        state.allMovies[index].likes += 1;
-        if(state.allMovies[index].isDisliked) {
-          state.allMovies[index].dislikes -= 1;
+    SET_LIKE(state, id) {
+      const thisMovie = state.allMovies.find((movie) => id === movie.id);
+      console.log(thisMovie);
+      if(thisMovie.isLiked === false){
+        thisMovie.isLiked = !thisMovie.isLiked;
+        thisMovie.likes += 1;
+        if(thisMovie.isDisliked) {
+          thisMovie.dislikes -= 1;
         }
       }else {
-        state.allMovies[index].isLiked = !state.allMovies[index].isLiked;
-        state.allMovies[index].likes -= 1;
+        thisMovie.isLiked = !thisMovie.isLiked;
+        thisMovie.likes -= 1;
       }
-      state.allMovies[index].isDisliked = false;
+      thisMovie.isDisliked = false;
     },
-    SET_DISLIKE(state, index) {
-      if(state.allMovies[index].isDisliked === false){
-        state.allMovies[index].isDisliked = !state.allMovies[index].isDisliked;
-        state.allMovies[index].dislikes += 1;
-        if(state.allMovies[index].isLiked) {
-          state.allMovies[index].likes -= 1;
+    SET_DISLIKE(state, id) {
+      const thisMovie = state.allMovies.find((movie) => id === movie.id);
+      if(thisMovie.isDisliked === false){
+        thisMovie.isDisliked = !thisMovie.isDisliked;
+        thisMovie.dislikes += 1;
+        if(thisMovie.isLiked) {
+          thisMovie.likes -= 1;
         }
 
       }else {
-        state.allMovies[index].isDisliked = !state.allMovies[index].isDisliked;
-        state.allMovies[index].dislikes -= 1;
+        thisMovie.isDisliked = !thisMovie.isDisliked;
+        thisMovie.dislikes -= 1;
       }
-      state.allMovies[index].isLiked = false;
+      thisMovie.isLiked = false;
     }
 }
 
